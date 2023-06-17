@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const mailService = require('./email-service');
 const tokenService = require('./token-service');
 const UserDto = require('../dtos/user-dto');
+const ApiError = require('../exceptions/api-error');
 
 class UserService {
   async registration(email, password) {
@@ -11,7 +12,7 @@ class UserService {
     const candidate = await UserModel.findOne({ email });
     // if there is no user throw error
     if (candidate) {
-      throw new Error(`Username with this email:${email} exists`);
+      throw ApiError.BadRequest(`User with ${email} email exists`);
     }
 
     // hash password
